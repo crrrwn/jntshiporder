@@ -74,6 +74,7 @@
                     <table class="w-full text-left border-collapse min-w-[300px]">
                         <thead class="bg-blue-100 sticky top-0">
                             <tr>
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap w-10">#</th>
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Admin Name</th>
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Qty</th>
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Action</th>
@@ -106,6 +107,7 @@
                     <table class="w-full text-left border-collapse min-w-[350px]">
                         <thead class="bg-red-100 sticky top-0">
                             <tr>
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap w-10">#</th>
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Customer Name</th>
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Fee (₱)</th>
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Action</th>
@@ -243,6 +245,7 @@
             // --- ADMIN TOTALS & TABLE ---
             let shairaTotal = 0, ladyannTotal = 0, jeniferTotal = 0;
             let adminTableHTML = "";
+            let adminCounter = 1; // Counter para sa number ng Admin
 
             allAdminData.forEach(item => {
                 if(item.date_encoded >= start && item.date_encoded <= end) {
@@ -250,9 +253,10 @@
                     if(item.admin === "Ladyann M. De Castro") ladyannTotal += item.quantity;
                     if(item.admin === "Jenifer L. Pineda") jeniferTotal += item.quantity;
 
-                    // Gawa ng table row para sa Admin gamit ang Iconify
+                    // Gawa ng table row para sa Admin gamit ang Iconify at Number
                     adminTableHTML += `
                         <tr class="border-b hover:bg-gray-50 transition duration-150">
+                            <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">${adminCounter++}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700">${item.admin.split(' ')[0]}</td> 
                             <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-blue-600">${item.quantity}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
@@ -276,15 +280,17 @@
             // --- J&T TOTALS & TABLE UPDATE ---
             let totalOrders = 0, totalFees = 0;
             let jntTableHTML = ""; 
+            let jntCounter = 1; // Counter para sa number ng J&T
 
             allJntData.forEach(item => {
                 if(item.date_encoded >= start && item.date_encoded <= end) {
                     totalOrders++;
                     totalFees += item.shippingFee;
                     
-                    // Gawa ng table row para sa J&T gamit ang Iconify
+                    // Gawa ng table row para sa J&T gamit ang Iconify at Number
                     jntTableHTML += `
                         <tr class="border-b hover:bg-gray-50 transition duration-150">
+                            <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">${jntCounter++}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700">${item.customerName}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-red-600">₱ ${item.shippingFee.toLocaleString()}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
