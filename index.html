@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 </head>
-<body class="bg-gray-100 p-4 md:p-8 font-sans text-sm md:text-base">
+<body class="bg-gray-100 p-4 md:p-8 font-sans text-sm md:text-base relative">
 
     <div class="max-w-6xl mx-auto mb-6 bg-white p-4 md:p-6 rounded-lg shadow-md flex flex-col md:flex-row items-start md:items-center justify-between border-l-4 border-yellow-500 gap-4">
         <h2 class="text-lg font-bold text-gray-700 flex items-center">
@@ -49,11 +49,10 @@
     </div>
 
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-        
         <div class="bg-white p-5 md:p-6 rounded-lg shadow-md border-t-4 border-blue-500 h-fit">
             <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800">Admin Order Encoding</h2>
             
-            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Order (Pwede palitan para sa kahapon)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Order</label>
             <input type="date" id="adminDate" class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50">
 
             <label class="block text-sm font-medium text-gray-700 mb-1">Admin Name</label>
@@ -69,7 +68,12 @@
             <button onclick="saveAdminOrder()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 mb-6 rounded w-full transition duration-200 shadow-sm">Save Admin Order</button>
 
             <div class="border-t pt-4">
-                <h3 class="font-bold mb-3 text-blue-800 text-sm md:text-base">Encoded Admin Orders (Based sa piniling petsa sa taas)</h3>
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-blue-800 text-sm md:text-base">Encoded Admin Orders</h3>
+                    <button onclick="copyTable('adminTableBody')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition">
+                        <iconify-icon icon="mdi:content-copy"></iconify-icon> Copy Table
+                    </button>
+                </div>
                 <div class="max-h-64 overflow-y-auto overflow-x-auto border rounded shadow-inner">
                     <table class="w-full text-left border-collapse min-w-[300px]">
                         <thead class="bg-blue-100 sticky top-0">
@@ -80,8 +84,7 @@
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="adminTableBody">
-                            </tbody>
+                        <tbody id="adminTableBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -90,7 +93,7 @@
         <div class="bg-white p-5 md:p-6 rounded-lg shadow-md border-t-4 border-red-500 h-fit">
             <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800">J&T Shipping Encoding</h2>
             
-            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Shipping (Pwede palitan para sa kahapon)</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Shipping</label>
             <input type="date" id="jntDate" class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-red-400 bg-red-50">
 
             <label class="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
@@ -102,7 +105,12 @@
             <button onclick="saveJntShipping()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 mb-6 rounded w-full transition duration-200 shadow-sm">Save Shipping Details</button>
 
             <div class="border-t pt-4">
-                <h3 class="font-bold mb-3 text-red-800 text-sm md:text-base">Encoded Customers (Based sa piniling petsa sa taas)</h3>
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-red-800 text-sm md:text-base">Encoded Customers</h3>
+                    <button onclick="copyTable('jntTableBody')" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition">
+                        <iconify-icon icon="mdi:content-copy"></iconify-icon> Copy Table
+                    </button>
+                </div>
                 <div class="max-h-64 overflow-y-auto overflow-x-auto border rounded shadow-inner">
                     <table class="w-full text-left border-collapse min-w-[350px]">
                         <thead class="bg-red-100 sticky top-0">
@@ -113,17 +121,133 @@
                                 <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="jntTableBody">
-                            </tbody>
+                        <tbody id="jntTableBody"></tbody>
                     </table>
                 </div>
             </div>
         </div>
+    </div>
+    <div id="alertModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0" id="alertBox">
+            <div class="flex justify-center mb-4" id="alertIconContainer">
+                </div>
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2" id="alertTitle">Title</h3>
+            <p class="text-center text-gray-600 mb-6" id="alertMessage">Message goes here</p>
+            <button onclick="closeModal('alertModal')" class="w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200" id="alertBtn">OK</button>
+        </div>
+    </div>
 
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0" id="confirmBox">
+            <div class="flex justify-center mb-4 text-red-500">
+                <iconify-icon icon="mdi:alert-circle-outline" class="text-6xl"></iconify-icon>
+            </div>
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Delete Record?</h3>
+            <p class="text-center text-gray-600 mb-6" id="confirmMessage">Sigurado ka bang gusto mong burahin ito?</p>
+            <div class="flex gap-3">
+                <button onclick="closeModal('confirmModal')" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200">Cancel</button>
+                <button id="confirmYesBtn" class="w-1/2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="promptModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0" id="promptBox">
+            <div class="flex justify-center mb-4 text-yellow-500">
+                <iconify-icon icon="mdi:pencil-circle" class="text-6xl"></iconify-icon>
+            </div>
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Edit Record</h3>
+            <p class="text-center text-gray-600 mb-4 text-sm" id="promptMessage">Enter new value:</p>
+            <input type="number" step="any" id="promptInput" class="w-full border-2 border-yellow-300 p-3 mb-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-center font-bold text-lg text-gray-700">
+            <div class="flex gap-3">
+                <button onclick="closeModal('promptModal')" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200">Cancel</button>
+                <button id="promptSaveBtn" class="w-1/2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200">Save</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // FIREBASE CONFIG MO
+        // --- CUSTOM MODAL SYSTEM ---
+        let confirmCallback = null;
+        let promptCallback = null;
+
+        function openModal(id, boxId) {
+            const modal = document.getElementById(id);
+            const box = document.getElementById(boxId);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Small delay for smooth animation
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const box = modal.children[0]; // Gets the inner box
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            // Wait for animation to finish before hiding
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        // Show Alert (Success / Warning / Error)
+        function showAlert(title, message, type = "success") {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMessage').innerText = message;
+            
+            const iconContainer = document.getElementById('alertIconContainer');
+            const btn = document.getElementById('alertBtn');
+            
+            if (type === "success") {
+                iconContainer.innerHTML = '<iconify-icon icon="mdi:check-circle" class="text-6xl text-green-500"></iconify-icon>';
+                btn.className = "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-green-500 hover:bg-green-600";
+            } else if (type === "warning") {
+                iconContainer.innerHTML = '<iconify-icon icon="mdi:alert-rhombus" class="text-6xl text-yellow-500"></iconify-icon>';
+                btn.className = "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-yellow-500 hover:bg-yellow-600";
+            } else {
+                iconContainer.innerHTML = '<iconify-icon icon="mdi:close-circle" class="text-6xl text-red-500"></iconify-icon>';
+                btn.className = "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-red-500 hover:bg-red-600";
+            }
+            
+            openModal('alertModal', 'alertBox');
+        }
+
+        // Show Confirm (Delete)
+        function showConfirm(message, callback) {
+            document.getElementById('confirmMessage').innerText = message;
+            confirmCallback = callback;
+            openModal('confirmModal', 'confirmBox');
+        }
+
+        document.getElementById('confirmYesBtn').addEventListener('click', () => {
+            if(confirmCallback) confirmCallback();
+            closeModal('confirmModal');
+        });
+
+        // Show Prompt (Edit)
+        function showPrompt(message, defaultValue, callback) {
+            document.getElementById('promptMessage').innerText = message;
+            const inputField = document.getElementById('promptInput');
+            inputField.value = defaultValue;
+            promptCallback = callback;
+            openModal('promptModal', 'promptBox');
+            // Auto focus on input after animation
+            setTimeout(() => inputField.focus(), 200);
+        }
+
+        document.getElementById('promptSaveBtn').addEventListener('click', () => {
+            const val = document.getElementById('promptInput').value;
+            if(promptCallback) promptCallback(val);
+            closeModal('promptModal');
+        });
+
+
+        // --- FIREBASE CONFIG & APP LOGIC ---
         const firebaseConfig = {
             apiKey: "AIzaSyCSUDE6Vt4PO6HULNyTLZbivDZvCSSSSEo",
             authDomain: "jntshiporder.firebaseapp.com",
@@ -133,26 +257,22 @@
             appId: "1:848162701714:web:a210d538b87061b02b014b"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // VARIABLES PARA I-HOLD ANG DATA NANG REAL-TIME
         let allAdminData = [];
         let allJntData = [];
 
-        // KUNIN ANG PETSA NGAYON (Para i-set as default)
         const todayDate = new Date();
         todayDate.setMinutes(todayDate.getMinutes() - todayDate.getTimezoneOffset());
         const formattedToday = todayDate.toISOString().split('T')[0];
         
-        // I-SET ANG DEFAULT DATES
         document.getElementById('startDate').value = formattedToday;
         document.getElementById('endDate').value = formattedToday;
         document.getElementById('adminDate').value = formattedToday;
         document.getElementById('jntDate').value = formattedToday;
 
-        // FUNCTION PARA MAG-SAVE NG ADMIN ORDER
+        // SAVE ADMIN
         function saveAdminOrder() {
             const name = document.getElementById('adminName').value;
             const qty = parseInt(document.getElementById('itemQty').value) || 0;
@@ -165,14 +285,15 @@
                     date_encoded: recordDate, 
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
+                    showAlert("Success!", "Admin order has been saved.", "success");
                     document.getElementById('itemQty').value = '';
-                }).catch(error => alert("Error saving: " + error.message));
+                }).catch(error => showAlert("Error", error.message, "error"));
             } else {
-                alert("Paki-check kung may laman ang Item Quantity at Date.");
+                showAlert("Missing Info", "Paki-check kung may laman ang Item Quantity at Date.", "warning");
             }
         }
 
-        // FUNCTION PARA MAG-SAVE NG J&T SHIPPING
+        // SAVE JNT
         function saveJntShipping() {
             const name = document.getElementById('jntName').value;
             const fee = parseFloat(document.getElementById('jntFee').value) || 0;
@@ -185,67 +306,102 @@
                     date_encoded: recordDate,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
+                    showAlert("Success!", "Shipping details saved.", "success");
                     document.getElementById('jntName').value = '';
                     document.getElementById('jntFee').value = '';
-                }).catch(error => alert("Error saving: " + error.message));
+                }).catch(error => showAlert("Error", error.message, "error"));
             } else {
-                alert("Ilagay ang pangalan at tamang shipping fee.");
+                showAlert("Missing Info", "Ilagay ang customer name at tamang shipping fee.", "warning");
             }
         }
 
-        // ==========================================
-        // EDIT AT DELETE FUNCTIONS PARA SA ADMIN
-        // ==========================================
+        // DELETE & EDIT ADMIN
         function deleteAdmin(id) {
-            if(confirm("Sigurado ka bang gusto mong burahin ang order na ito?")) {
+            showConfirm("Burahin ang admin order record na ito?", () => {
                 db.collection("admin_orders").doc(id).delete()
-                  .catch(error => alert("Error deleting: " + error.message));
-            }
+                  .then(() => showAlert("Deleted", "Record removed successfully.", "success"))
+                  .catch(error => showAlert("Error", error.message, "error"));
+            });
         }
 
         function editAdmin(id) {
             const item = allAdminData.find(x => x.id === id);
             if(!item) return;
 
-            let newQty = prompt(`Bagong Item Quantity para kay ${item.admin}:`, item.quantity);
-            if(newQty !== null && newQty.trim() !== "" && !isNaN(newQty)) {
-                db.collection("admin_orders").doc(id).update({
-                    quantity: parseInt(newQty)
-                }).catch(error => alert("Error updating: " + error.message));
-            }
+            showPrompt(`Edit quantity para kay ${item.admin.split(' ')[0]}:`, item.quantity, (newQty) => {
+                if(newQty !== null && newQty.toString().trim() !== "" && !isNaN(newQty)) {
+                    db.collection("admin_orders").doc(id).update({
+                        quantity: parseInt(newQty)
+                    })
+                    .then(() => showAlert("Updated", "Admin order updated successfully.", "success"))
+                    .catch(error => showAlert("Error", error.message, "error"));
+                }
+            });
         }
 
-        // ==========================================
-        // EDIT AT DELETE FUNCTIONS PARA SA J&T
-        // ==========================================
+        // DELETE & EDIT JNT
         function deleteJnt(id) {
-            if(confirm("Sigurado ka bang gusto mong burahin ang shipping detail na ito?")) {
+            showConfirm("Burahin ang shipping detail na ito?", () => {
                 db.collection("jnt_shipping").doc(id).delete()
-                  .catch(error => alert("Error deleting: " + error.message));
-            }
+                  .then(() => showAlert("Deleted", "Record removed successfully.", "success"))
+                  .catch(error => showAlert("Error", error.message, "error"));
+            });
         }
 
         function editJnt(id) {
             const item = allJntData.find(x => x.id === id);
             if(!item) return;
 
-            let newFee = prompt(`Bagong Shipping Fee para kay ${item.customerName}:`, item.shippingFee);
-            if(newFee !== null && newFee.trim() !== "" && !isNaN(newFee)) {
-                db.collection("jnt_shipping").doc(id).update({
-                    shippingFee: parseFloat(newFee)
-                }).catch(error => alert("Error updating: " + error.message));
-            }
+            showPrompt(`Edit shipping fee para kay ${item.customerName}:`, item.shippingFee, (newFee) => {
+                if(newFee !== null && newFee.toString().trim() !== "" && !isNaN(newFee)) {
+                    db.collection("jnt_shipping").doc(id).update({
+                        shippingFee: parseFloat(newFee)
+                    })
+                    .then(() => showAlert("Updated", "Shipping fee updated successfully.", "success"))
+                    .catch(error => showAlert("Error", error.message, "error"));
+                }
+            });
         }
 
-        // FUNCTION PARA MAG-COMPUTE AT MAG-UPDATE NG DASHBOARD AT TABLES
+        // COPY TABLE
+        function copyTable(tableBodyId) {
+            const rows = document.querySelectorAll(`#${tableBodyId} tr`);
+            
+            if(rows.length === 0) {
+                showAlert("Empty Table", "Walang data na pwedeng i-copy.", "warning");
+                return;
+            }
+
+            let textToCopy = "";
+            if(tableBodyId === 'adminTableBody') {
+                textToCopy += "#\tAdmin Name\tQty\n";
+            } else {
+                textToCopy += "#\tCustomer Name\tFee (₱)\n";
+            }
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                if(cells.length >= 3) {
+                    textToCopy += `${cells[0].innerText}\t${cells[1].innerText}\t${cells[2].innerText}\n`;
+                }
+            });
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showAlert("Copied!", "Na-copy na ang table! Pwede mo na i-paste (Ctrl+V).", "success");
+            }).catch(err => {
+                showAlert("Error", "Hindi ma-copy ang table.", "error");
+            });
+        }
+
+        // COMPUTE & UPDATE UI
         function updateDashboardTotals() {
             const start = document.getElementById('startDate').value;
             const end = document.getElementById('endDate').value;
 
-            // --- ADMIN TOTALS & TABLE ---
+            // Admin
             let shairaTotal = 0, ladyannTotal = 0, jeniferTotal = 0;
             let adminTableHTML = "";
-            let adminCounter = 1; // Counter para sa number ng Admin
+            let adminCounter = 1;
 
             allAdminData.forEach(item => {
                 if(item.date_encoded >= start && item.date_encoded <= end) {
@@ -253,17 +409,16 @@
                     if(item.admin === "Ladyann M. De Castro") ladyannTotal += item.quantity;
                     if(item.admin === "Jenifer L. Pineda") jeniferTotal += item.quantity;
 
-                    // Gawa ng table row para sa Admin gamit ang Iconify at Number
                     adminTableHTML += `
                         <tr class="border-b hover:bg-gray-50 transition duration-150">
                             <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">${adminCounter++}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700">${item.admin.split(' ')[0]}</td> 
                             <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-blue-600">${item.quantity}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
-                                <button onclick="editAdmin('${item.id}')" title="Edit" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center">
+                                <button onclick="editAdmin('${item.id}')" title="Edit" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
                                     <iconify-icon icon="mdi:pencil" class="text-base"></iconify-icon>
                                 </button>
-                                <button onclick="deleteAdmin('${item.id}')" title="Delete" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center">
+                                <button onclick="deleteAdmin('${item.id}')" title="Delete" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
                                     <iconify-icon icon="mdi:trash-can-outline" class="text-base"></iconify-icon>
                                 </button>
                             </td>
@@ -277,27 +432,26 @@
             document.getElementById('dashJenifer').innerText = jeniferTotal.toLocaleString();
             document.getElementById('adminTableBody').innerHTML = adminTableHTML;
 
-            // --- J&T TOTALS & TABLE UPDATE ---
+            // J&T
             let totalOrders = 0, totalFees = 0;
             let jntTableHTML = ""; 
-            let jntCounter = 1; // Counter para sa number ng J&T
+            let jntCounter = 1;
 
             allJntData.forEach(item => {
                 if(item.date_encoded >= start && item.date_encoded <= end) {
                     totalOrders++;
                     totalFees += item.shippingFee;
                     
-                    // Gawa ng table row para sa J&T gamit ang Iconify at Number
                     jntTableHTML += `
                         <tr class="border-b hover:bg-gray-50 transition duration-150">
                             <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">${jntCounter++}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700">${item.customerName}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-red-600">₱ ${item.shippingFee.toLocaleString()}</td>
                             <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
-                                <button onclick="editJnt('${item.id}')" title="Edit" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center">
+                                <button onclick="editJnt('${item.id}')" title="Edit" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
                                     <iconify-icon icon="mdi:pencil" class="text-base"></iconify-icon>
                                 </button>
-                                <button onclick="deleteJnt('${item.id}')" title="Delete" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center">
+                                <button onclick="deleteJnt('${item.id}')" title="Delete" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
                                     <iconify-icon icon="mdi:trash-can-outline" class="text-base"></iconify-icon>
                                 </button>
                             </td>
@@ -311,25 +465,19 @@
             document.getElementById('jntTableBody').innerHTML = jntTableHTML;
         }
 
-        // KUNG MAGPALIT NG PETSA SA DASHBOARD FILTER, I-UPDATE AGAD
         document.getElementById('startDate').addEventListener('change', updateDashboardTotals);
         document.getElementById('endDate').addEventListener('change', updateDashboardTotals);
 
-        // REAL-TIME LISTENER PARA SA ADMIN ORDERS
+        // LISTENERS
         db.collection("admin_orders").orderBy("timestamp", "desc").onSnapshot((querySnapshot) => {
             allAdminData = []; 
-            querySnapshot.forEach((doc) => {
-                allAdminData.push({ id: doc.id, ...doc.data() });
-            });
+            querySnapshot.forEach((doc) => allAdminData.push({ id: doc.id, ...doc.data() }));
             updateDashboardTotals(); 
         });
 
-        // REAL-TIME LISTENER PARA SA J&T SHIPPING
         db.collection("jnt_shipping").orderBy("timestamp", "desc").onSnapshot((querySnapshot) => {
             allJntData = []; 
-            querySnapshot.forEach((doc) => {
-                allJntData.push({ id: doc.id, ...doc.data() });
-            });
+            querySnapshot.forEach((doc) => allJntData.push({ id: doc.id, ...doc.data() }));
             updateDashboardTotals(); 
         });
 
