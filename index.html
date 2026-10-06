@@ -4,483 +4,1832 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>J&T and Admin Encoding System</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 </head>
+
 <body class="bg-gray-100 p-4 md:p-8 font-sans text-sm md:text-base relative">
 
+    <!-- DASHBOARD FILTER -->
     <div class="max-w-6xl mx-auto mb-6 bg-white p-4 md:p-6 rounded-lg shadow-md flex flex-col md:flex-row items-start md:items-center justify-between border-l-4 border-yellow-500 gap-4">
+
         <h2 class="text-lg font-bold text-gray-700 flex items-center">
             📅 Dashboard Filter
         </h2>
+
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center w-full md:w-auto">
+
             <div class="w-full sm:w-auto">
-                <label class="text-xs text-gray-500 block mb-1">Start Date</label>
-                <input type="date" id="startDate" class="w-full sm:w-auto border p-2 rounded focus:ring-2 focus:ring-yellow-400">
+                <label class="text-xs text-gray-500 block mb-1">
+                    Start Date
+                </label>
+
+                <input
+                    type="date"
+                    id="startDate"
+                    class="w-full sm:w-auto border p-2 rounded focus:ring-2 focus:ring-yellow-400"
+                >
             </div>
+
             <div class="w-full sm:w-auto">
-                <label class="text-xs text-gray-500 block mb-1">End Date</label>
-                <input type="date" id="endDate" class="w-full sm:w-auto border p-2 rounded focus:ring-2 focus:ring-yellow-400">
+                <label class="text-xs text-gray-500 block mb-1">
+                    End Date
+                </label>
+
+                <input
+                    type="date"
+                    id="endDate"
+                    class="w-full sm:w-auto border p-2 rounded focus:ring-2 focus:ring-yellow-400"
+                >
             </div>
+
         </div>
     </div>
 
+
+    <!-- DASHBOARD -->
     <div class="max-w-6xl mx-auto mb-8 md:mb-10">
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+
+            <!-- ADMIN SUMMARY -->
             <div class="bg-gradient-to-r from-blue-700 to-blue-900 p-5 md:p-6 rounded-xl shadow-lg text-white">
-                <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4 border-b border-blue-500 pb-2">🏆 Total Admin Items (Pcs)</h2>
+
+                <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4 border-b border-blue-500 pb-2">
+                    🏆 Total Admin Items (Pcs)
+                </h2>
+
                 <div class="space-y-2 md:space-y-3 text-base md:text-lg">
-                    <p class="flex justify-between"><span>Shaira:</span> <span class="font-bold text-yellow-300"><span id="dashShaira">0</span> Pcs</span></p>
-                    <p class="flex justify-between"><span>Ladyann:</span> <span class="font-bold text-yellow-300"><span id="dashLadyann">0</span> Pcs</span></p>
-                    <p class="flex justify-between"><span>Jenifer:</span> <span class="font-bold text-yellow-300"><span id="dashJenifer">0</span> Pcs</span></p>
+
+                    <p class="flex justify-between">
+                        <span>Shaira:</span>
+
+                        <span class="font-bold text-yellow-300">
+                            <span id="dashShaira">0</span> Pcs
+                        </span>
+                    </p>
+
+                    <p class="flex justify-between">
+                        <span>Ladyann:</span>
+
+                        <span class="font-bold text-yellow-300">
+                            <span id="dashLadyann">0</span> Pcs
+                        </span>
+                    </p>
+
+                    <p class="flex justify-between">
+                        <span>Jenifer:</span>
+
+                        <span class="font-bold text-yellow-300">
+                            <span id="dashJenifer">0</span> Pcs
+                        </span>
+                    </p>
+
                 </div>
             </div>
 
+
+            <!-- J&T SUMMARY -->
             <div class="bg-gradient-to-r from-red-700 to-red-900 p-5 md:p-6 rounded-xl shadow-lg text-white">
-                <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4 border-b border-red-500 pb-2">📦 Total J&T Summary</h2>
+
+                <h2 class="text-lg md:text-xl font-bold mb-3 md:mb-4 border-b border-red-500 pb-2">
+                    📦 Total J&T Summary
+                </h2>
+
                 <div class="space-y-2 md:space-y-3 text-base md:text-lg">
-                    <p class="flex justify-between"><span>Total Encoded Orders:</span> <span class="font-bold text-yellow-300" id="dashJntOrders">0</span></p>
-                    <p class="flex justify-between"><span>Total Shipping Fees:</span> <span class="font-bold text-yellow-300">₱<span id="dashJntFees">0</span></span></p>
+
+                    <p class="flex justify-between">
+                        <span>Total Encoded Orders:</span>
+
+                        <span
+                            class="font-bold text-yellow-300"
+                            id="dashJntOrders"
+                        >
+                            0
+                        </span>
+                    </p>
+
+                    <p class="flex justify-between">
+                        <span>Total Shipping Fees:</span>
+
+                        <span class="font-bold text-yellow-300">
+                            ₱<span id="dashJntFees">0</span>
+                        </span>
+                    </p>
+
                 </div>
             </div>
+
         </div>
     </div>
 
+
+    <!-- MAIN CONTENT -->
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+
+
+        <!-- ADMIN ORDER -->
         <div class="bg-white p-5 md:p-6 rounded-lg shadow-md border-t-4 border-blue-500 h-fit">
-            <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800">Admin Order Encoding</h2>
-            
-            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Order</label>
-            <input type="date" id="adminDate" class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50">
 
-            <label class="block text-sm font-medium text-gray-700 mb-1">Admin Name</label>
-            <select id="adminName" class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <option value="Shaira Janiel D. Monsanto">Shaira Janiel D. Monsanto</option>
-                <option value="Ladyann M. De Castro">Ladyann M. De Castro</option>
-                <option value="Jenifer L. Pineda">Jenifer L. Pineda</option>
+            <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800">
+                Admin Order Encoding
+            </h2>
+
+
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Date of Order
+            </label>
+
+            <input
+                type="date"
+                id="adminDate"
+                class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50"
+            >
+
+
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Admin Name
+            </label>
+
+            <select
+                id="adminName"
+                class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+
+                <option value="Shaira Janiel D. Monsanto">
+                    Shaira Janiel D. Monsanto
+                </option>
+
+                <option value="Ladyann M. De Castro">
+                    Ladyann M. De Castro
+                </option>
+
+                <option value="Jenifer L. Pineda">
+                    Jenifer L. Pineda
+                </option>
+
             </select>
-            
-            <label class="block text-sm font-medium text-gray-700 mb-1">Total Items Inside Pouch</label>
-            <input type="number" id="itemQty" placeholder="Example: 5" class="w-full border p-2 md:p-3 mb-5 rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-            
-            <button onclick="saveAdminOrder()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 mb-6 rounded w-full transition duration-200 shadow-sm">Save Admin Order</button>
 
+
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Total Items Inside Pouch
+            </label>
+
+            <input
+                type="number"
+                id="itemQty"
+                placeholder="Example: 5"
+                class="w-full border p-2 md:p-3 mb-5 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+
+
+            <button
+                onclick="saveAdminOrder()"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-3 mb-6 rounded w-full transition duration-200 shadow-sm"
+            >
+                Save Admin Order
+            </button>
+
+
+            <!-- ADMIN TABLE -->
             <div class="border-t pt-4">
+
                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-bold text-blue-800 text-sm md:text-base">Encoded Admin Orders</h3>
-                    <button onclick="copyTable('adminTableBody')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition">
-                        <iconify-icon icon="mdi:content-copy"></iconify-icon> Copy Table
+
+                    <h3 class="font-bold text-blue-800 text-sm md:text-base">
+                        Encoded Admin Orders
+                    </h3>
+
+                    <button
+                        onclick="copyTable('adminTableBody')"
+                        class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition"
+                    >
+
+                        <iconify-icon icon="mdi:content-copy"></iconify-icon>
+
+                        Copy Table
                     </button>
+
                 </div>
+
+
                 <div class="max-h-64 overflow-y-auto overflow-x-auto border rounded shadow-inner">
+
                     <table class="w-full text-left border-collapse min-w-[300px]">
+
                         <thead class="bg-blue-100 sticky top-0">
+
                             <tr>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap w-10">#</th>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Admin Name</th>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Qty</th>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Action</th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap w-10">
+                                    #
+                                </th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                                    Admin Name
+                                </th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                                    Qty
+                                </th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">
+                                    Action
+                                </th>
+
                             </tr>
+
                         </thead>
+
                         <tbody id="adminTableBody"></tbody>
+
                     </table>
+
                 </div>
             </div>
+
         </div>
 
+
+
+        <!-- J&T SHIPPING -->
         <div class="bg-white p-5 md:p-6 rounded-lg shadow-md border-t-4 border-red-500 h-fit">
-            <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800">J&T Shipping Encoding</h2>
-            
-            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Shipping</label>
-            <input type="date" id="jntDate" class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-red-400 bg-red-50">
 
-            <label class="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
-            <input type="text" id="jntName" placeholder="Example: Kaye Mahinay" class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
-            
-            <label class="block text-sm font-medium text-gray-700 mb-1">Shipping Fee (₱)</label>
-            <input type="number" id="jntFee" placeholder="Example: 75" class="w-full border p-2 md:p-3 mb-5 rounded focus:outline-none focus:ring-2 focus:ring-red-400">
-            
-            <button onclick="saveJntShipping()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 mb-6 rounded w-full transition duration-200 shadow-sm">Save Shipping Details</button>
+            <h2 class="text-lg md:text-xl font-bold mb-4 text-gray-800">
+                J&T Shipping Encoding
+            </h2>
 
+
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Date of Shipping
+            </label>
+
+            <input
+                type="date"
+                id="jntDate"
+                class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-red-400 bg-red-50"
+            >
+
+
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Customer Name
+            </label>
+
+            <!-- AUTO CAPSLOCK CUSTOMER NAME -->
+            <input
+                type="text"
+                id="jntName"
+                placeholder="EXAMPLE: KAYE MAHINAY"
+                autocomplete="off"
+                autocapitalize="characters"
+                class="w-full border p-2 md:p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-red-400 uppercase"
+            >
+
+
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Shipping Fee (₱)
+            </label>
+
+            <input
+                type="number"
+                id="jntFee"
+                placeholder="Example: 75"
+                class="w-full border p-2 md:p-3 mb-5 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+
+
+            <button
+                onclick="saveJntShipping()"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-3 mb-6 rounded w-full transition duration-200 shadow-sm"
+            >
+                Save Shipping Details
+            </button>
+
+
+            <!-- J&T TABLE -->
             <div class="border-t pt-4">
+
                 <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-bold text-red-800 text-sm md:text-base">Encoded Customers</h3>
-                    <button onclick="copyTable('jntTableBody')" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition">
-                        <iconify-icon icon="mdi:content-copy"></iconify-icon> Copy Table
+
+                    <h3 class="font-bold text-red-800 text-sm md:text-base">
+                        Encoded Customers
+                    </h3>
+
+
+                    <button
+                        onclick="copyTable('jntTableBody')"
+                        class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition"
+                    >
+
+                        <iconify-icon icon="mdi:content-copy"></iconify-icon>
+
+                        Copy Table
                     </button>
+
                 </div>
+
+
                 <div class="max-h-64 overflow-y-auto overflow-x-auto border rounded shadow-inner">
+
                     <table class="w-full text-left border-collapse min-w-[350px]">
+
                         <thead class="bg-red-100 sticky top-0">
+
                             <tr>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap w-10">#</th>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Customer Name</th>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">Fee (₱)</th>
-                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">Action</th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap w-10">
+                                    #
+                                </th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                                    Customer Name
+                                </th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap">
+                                    Fee (₱)
+                                </th>
+
+                                <th class="p-2 md:p-3 border-b text-xs md:text-sm font-semibold text-gray-700 whitespace-nowrap text-center">
+                                    Action
+                                </th>
+
                             </tr>
+
                         </thead>
+
                         <tbody id="jntTableBody"></tbody>
+
                     </table>
+
                 </div>
             </div>
+
         </div>
+
     </div>
-    <div id="alertModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity">
-        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0" id="alertBox">
-            <div class="flex justify-center mb-4" id="alertIconContainer">
-                </div>
-            <h3 class="text-xl font-bold text-center text-gray-800 mb-2" id="alertTitle">Title</h3>
-            <p class="text-center text-gray-600 mb-6" id="alertMessage">Message goes here</p>
-            <button onclick="closeModal('alertModal')" class="w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200" id="alertBtn">OK</button>
+
+
+
+    <!-- ALERT MODAL -->
+    <div
+        id="alertModal"
+        class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity"
+    >
+
+        <div
+            class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0"
+            id="alertBox"
+        >
+
+            <div
+                class="flex justify-center mb-4"
+                id="alertIconContainer"
+            >
+            </div>
+
+
+            <h3
+                class="text-xl font-bold text-center text-gray-800 mb-2"
+                id="alertTitle"
+            >
+                Title
+            </h3>
+
+
+            <p
+                class="text-center text-gray-600 mb-6"
+                id="alertMessage"
+            >
+                Message goes here
+            </p>
+
+
+            <button
+                onclick="closeModal('alertModal')"
+                class="w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200"
+                id="alertBtn"
+            >
+                OK
+            </button>
+
         </div>
     </div>
 
-    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity">
-        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0" id="confirmBox">
+
+
+    <!-- CONFIRM MODAL -->
+    <div
+        id="confirmModal"
+        class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity"
+    >
+
+        <div
+            class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0"
+            id="confirmBox"
+        >
+
             <div class="flex justify-center mb-4 text-red-500">
-                <iconify-icon icon="mdi:alert-circle-outline" class="text-6xl"></iconify-icon>
+
+                <iconify-icon
+                    icon="mdi:alert-circle-outline"
+                    class="text-6xl"
+                ></iconify-icon>
+
             </div>
-            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Delete Record?</h3>
-            <p class="text-center text-gray-600 mb-6" id="confirmMessage">Sigurado ka bang gusto mong burahin ito?</p>
+
+
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">
+                Delete Record?
+            </h3>
+
+
+            <p
+                class="text-center text-gray-600 mb-6"
+                id="confirmMessage"
+            >
+                Sigurado ka bang gusto mong burahin ito?
+            </p>
+
+
             <div class="flex gap-3">
-                <button onclick="closeModal('confirmModal')" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200">Cancel</button>
-                <button id="confirmYesBtn" class="w-1/2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200">Yes, Delete</button>
+
+                <button
+                    onclick="closeModal('confirmModal')"
+                    class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    id="confirmYesBtn"
+                    class="w-1/2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200"
+                >
+                    Yes, Delete
+                </button>
+
             </div>
+
         </div>
     </div>
 
-    <div id="promptModal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity">
-        <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0" id="promptBox">
+
+
+    <!-- EDIT MODAL -->
+    <div
+        id="promptModal"
+        class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50 transition-opacity"
+    >
+
+        <div
+            class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full mx-4 transform transition-all scale-95 opacity-0"
+            id="promptBox"
+        >
+
             <div class="flex justify-center mb-4 text-yellow-500">
-                <iconify-icon icon="mdi:pencil-circle" class="text-6xl"></iconify-icon>
+
+                <iconify-icon
+                    icon="mdi:pencil-circle"
+                    class="text-6xl"
+                ></iconify-icon>
+
             </div>
-            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">Edit Record</h3>
-            <p class="text-center text-gray-600 mb-4 text-sm" id="promptMessage">Enter new value:</p>
-            <input type="number" step="any" id="promptInput" class="w-full border-2 border-yellow-300 p-3 mb-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-center font-bold text-lg text-gray-700">
+
+
+            <h3 class="text-xl font-bold text-center text-gray-800 mb-2">
+                Edit Record
+            </h3>
+
+
+            <p
+                class="text-center text-gray-600 mb-4 text-sm"
+                id="promptMessage"
+            >
+                Enter new value:
+            </p>
+
+
+            <input
+                type="number"
+                step="any"
+                id="promptInput"
+                class="w-full border-2 border-yellow-300 p-3 mb-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-center font-bold text-lg text-gray-700"
+            >
+
+
             <div class="flex gap-3">
-                <button onclick="closeModal('promptModal')" class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200">Cancel</button>
-                <button id="promptSaveBtn" class="w-1/2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200">Save</button>
+
+                <button
+                    onclick="closeModal('promptModal')"
+                    class="w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-200"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    id="promptSaveBtn"
+                    class="w-1/2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200"
+                >
+                    Save
+                </button>
+
             </div>
+
         </div>
     </div>
 
-    <script>
-        // --- CUSTOM MODAL SYSTEM ---
-        let confirmCallback = null;
-        let promptCallback = null;
 
-        function openModal(id, boxId) {
-            const modal = document.getElementById(id);
-            const box = document.getElementById(boxId);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            // Small delay for smooth animation
-            setTimeout(() => {
-                box.classList.remove('scale-95', 'opacity-0');
-                box.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
 
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            const box = modal.children[0]; // Gets the inner box
-            box.classList.remove('scale-100', 'opacity-100');
-            box.classList.add('scale-95', 'opacity-0');
-            // Wait for animation to finish before hiding
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 200);
-        }
+<script>
 
-        // Show Alert (Success / Warning / Error)
-        function showAlert(title, message, type = "success") {
-            document.getElementById('alertTitle').innerText = title;
-            document.getElementById('alertMessage').innerText = message;
-            
-            const iconContainer = document.getElementById('alertIconContainer');
-            const btn = document.getElementById('alertBtn');
-            
-            if (type === "success") {
-                iconContainer.innerHTML = '<iconify-icon icon="mdi:check-circle" class="text-6xl text-green-500"></iconify-icon>';
-                btn.className = "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-green-500 hover:bg-green-600";
-            } else if (type === "warning") {
-                iconContainer.innerHTML = '<iconify-icon icon="mdi:alert-rhombus" class="text-6xl text-yellow-500"></iconify-icon>';
-                btn.className = "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-yellow-500 hover:bg-yellow-600";
-            } else {
-                iconContainer.innerHTML = '<iconify-icon icon="mdi:close-circle" class="text-6xl text-red-500"></iconify-icon>';
-                btn.className = "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-red-500 hover:bg-red-600";
-            }
-            
-            openModal('alertModal', 'alertBox');
-        }
+/* =========================================================
+   CUSTOM MODAL SYSTEM
+========================================================= */
 
-        // Show Confirm (Delete)
-        function showConfirm(message, callback) {
-            document.getElementById('confirmMessage').innerText = message;
-            confirmCallback = callback;
-            openModal('confirmModal', 'confirmBox');
-        }
+let confirmCallback = null;
+let promptCallback = null;
 
-        document.getElementById('confirmYesBtn').addEventListener('click', () => {
-            if(confirmCallback) confirmCallback();
-            closeModal('confirmModal');
+
+function openModal(id, boxId) {
+
+    const modal = document.getElementById(id);
+    const box = document.getElementById(boxId);
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    setTimeout(() => {
+
+        box.classList.remove(
+            'scale-95',
+            'opacity-0'
+        );
+
+        box.classList.add(
+            'scale-100',
+            'opacity-100'
+        );
+
+    }, 10);
+
+}
+
+
+
+function closeModal(id) {
+
+    const modal = document.getElementById(id);
+    const box = modal.children[0];
+
+    box.classList.remove(
+        'scale-100',
+        'opacity-100'
+    );
+
+    box.classList.add(
+        'scale-95',
+        'opacity-0'
+    );
+
+    setTimeout(() => {
+
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+
+    }, 200);
+
+}
+
+
+
+/* =========================================================
+   ALERT
+========================================================= */
+
+function showAlert(
+    title,
+    message,
+    type = "success"
+) {
+
+    document.getElementById('alertTitle').innerText = title;
+    document.getElementById('alertMessage').innerText = message;
+
+
+    const iconContainer =
+        document.getElementById('alertIconContainer');
+
+    const btn =
+        document.getElementById('alertBtn');
+
+
+    if (type === "success") {
+
+        iconContainer.innerHTML = `
+            <iconify-icon
+                icon="mdi:check-circle"
+                class="text-6xl text-green-500">
+            </iconify-icon>
+        `;
+
+        btn.className =
+            "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-green-500 hover:bg-green-600";
+
+    }
+
+    else if (type === "warning") {
+
+        iconContainer.innerHTML = `
+            <iconify-icon
+                icon="mdi:alert-rhombus"
+                class="text-6xl text-yellow-500">
+            </iconify-icon>
+        `;
+
+        btn.className =
+            "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-yellow-500 hover:bg-yellow-600";
+
+    }
+
+    else {
+
+        iconContainer.innerHTML = `
+            <iconify-icon
+                icon="mdi:close-circle"
+                class="text-6xl text-red-500">
+            </iconify-icon>
+        `;
+
+        btn.className =
+            "w-full text-white font-bold py-2 px-4 rounded-lg shadow transition duration-200 bg-red-500 hover:bg-red-600";
+
+    }
+
+
+    openModal(
+        'alertModal',
+        'alertBox'
+    );
+
+}
+
+
+
+/* =========================================================
+   CONFIRM DELETE
+========================================================= */
+
+function showConfirm(
+    message,
+    callback
+) {
+
+    document.getElementById(
+        'confirmMessage'
+    ).innerText = message;
+
+    confirmCallback = callback;
+
+    openModal(
+        'confirmModal',
+        'confirmBox'
+    );
+
+}
+
+
+
+document
+.getElementById('confirmYesBtn')
+.addEventListener('click', () => {
+
+    if (confirmCallback) {
+
+        confirmCallback();
+
+    }
+
+    closeModal('confirmModal');
+
+});
+
+
+
+/* =========================================================
+   EDIT PROMPT
+========================================================= */
+
+function showPrompt(
+    message,
+    defaultValue,
+    callback
+) {
+
+    document.getElementById(
+        'promptMessage'
+    ).innerText = message;
+
+
+    const inputField =
+        document.getElementById('promptInput');
+
+
+    inputField.value = defaultValue;
+
+    promptCallback = callback;
+
+
+    openModal(
+        'promptModal',
+        'promptBox'
+    );
+
+
+    setTimeout(() => {
+
+        inputField.focus();
+
+    }, 200);
+
+}
+
+
+
+document
+.getElementById('promptSaveBtn')
+.addEventListener('click', () => {
+
+    const val =
+        document.getElementById(
+            'promptInput'
+        ).value;
+
+
+    if (promptCallback) {
+
+        promptCallback(val);
+
+    }
+
+
+    closeModal('promptModal');
+
+});
+
+
+
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCSUDE6Vt4PO6HULNyTLZbivDZvCSSSSEo",
+
+    authDomain:
+        "jntshiporder.firebaseapp.com",
+
+    projectId:
+        "jntshiporder",
+
+    storageBucket:
+        "jntshiporder.firebasestorage.app",
+
+    messagingSenderId:
+        "848162701714",
+
+    appId:
+        "1:848162701714:web:a210d538b87061b02b014b"
+
+};
+
+
+
+firebase.initializeApp(
+    firebaseConfig
+);
+
+
+const db =
+    firebase.firestore();
+
+
+
+let allAdminData = [];
+let allJntData = [];
+
+
+
+/* =========================================================
+   TODAY DATE
+========================================================= */
+
+const todayDate =
+    new Date();
+
+
+todayDate.setMinutes(
+    todayDate.getMinutes()
+    -
+    todayDate.getTimezoneOffset()
+);
+
+
+const formattedToday =
+    todayDate
+    .toISOString()
+    .split('T')[0];
+
+
+
+document.getElementById(
+    'startDate'
+).value = formattedToday;
+
+
+document.getElementById(
+    'endDate'
+).value = formattedToday;
+
+
+document.getElementById(
+    'adminDate'
+).value = formattedToday;
+
+
+document.getElementById(
+    'jntDate'
+).value = formattedToday;
+
+
+
+/* =========================================================
+   SAVE ADMIN ORDER
+========================================================= */
+
+function saveAdminOrder() {
+
+    const name =
+        document
+        .getElementById('adminName')
+        .value;
+
+
+    const qty =
+        parseInt(
+            document
+            .getElementById('itemQty')
+            .value
+        ) || 0;
+
+
+    const recordDate =
+        document
+        .getElementById('adminDate')
+        .value;
+
+
+    if (
+        qty > 0 &&
+        recordDate
+    ) {
+
+        db
+        .collection("admin_orders")
+        .add({
+
+            admin: name,
+
+            quantity: qty,
+
+            date_encoded:
+                recordDate,
+
+            timestamp:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        })
+
+        .then(() => {
+
+            showAlert(
+                "Success!",
+                "Admin order has been saved.",
+                "success"
+            );
+
+
+            document
+            .getElementById(
+                'itemQty'
+            ).value = '';
+
+        })
+
+        .catch(error => {
+
+            showAlert(
+                "Error",
+                error.message,
+                "error"
+            );
+
         });
 
-        // Show Prompt (Edit)
-        function showPrompt(message, defaultValue, callback) {
-            document.getElementById('promptMessage').innerText = message;
-            const inputField = document.getElementById('promptInput');
-            inputField.value = defaultValue;
-            promptCallback = callback;
-            openModal('promptModal', 'promptBox');
-            // Auto focus on input after animation
-            setTimeout(() => inputField.focus(), 200);
+    }
+
+    else {
+
+        showAlert(
+            "Missing Info",
+            "Paki-check kung may laman ang Item Quantity at Date.",
+            "warning"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   AUTO CAPSLOCK / AUTO UPPERCASE CUSTOMER NAME
+========================================================= */
+
+const jntNameInput =
+    document.getElementById(
+        'jntName'
+    );
+
+
+jntNameInput.addEventListener(
+    'input',
+    function () {
+
+        /*
+        Kunin muna ang position
+        ng cursor bago gawing uppercase
+        */
+
+        const cursorStart =
+            this.selectionStart;
+
+        const cursorEnd =
+            this.selectionEnd;
+
+
+        /*
+        AUTOMATICALLY CONVERT
+        ALL LETTERS TO UPPERCASE
+        */
+
+        this.value =
+            this.value.toUpperCase();
+
+
+        /*
+        Ibalik ang cursor
+        sa dating position
+        */
+
+        if (
+            cursorStart !== null &&
+            cursorEnd !== null
+        ) {
+
+            this.setSelectionRange(
+                cursorStart,
+                cursorEnd
+            );
+
         }
 
-        document.getElementById('promptSaveBtn').addEventListener('click', () => {
-            const val = document.getElementById('promptInput').value;
-            if(promptCallback) promptCallback(val);
-            closeModal('promptModal');
+    }
+);
+
+
+
+/* =========================================================
+   SAVE J&T SHIPPING
+========================================================= */
+
+function saveJntShipping() {
+
+    /*
+    DOUBLE PROTECTION:
+    Kahit somehow hindi nag-trigger
+    ang input listener,
+    uppercase pa rin bago i-save
+    */
+
+    const name =
+        document
+        .getElementById('jntName')
+        .value
+        .trim()
+        .toUpperCase();
+
+
+    const fee =
+        parseFloat(
+            document
+            .getElementById('jntFee')
+            .value
+        ) || 0;
+
+
+    const recordDate =
+        document
+        .getElementById('jntDate')
+        .value;
+
+
+    if (
+        name &&
+        fee > 0 &&
+        recordDate
+    ) {
+
+        db
+        .collection("jnt_shipping")
+        .add({
+
+            customerName:
+                name,
+
+            shippingFee:
+                fee,
+
+            date_encoded:
+                recordDate,
+
+            timestamp:
+                firebase
+                .firestore
+                .FieldValue
+                .serverTimestamp()
+
+        })
+
+        .then(() => {
+
+            showAlert(
+                "Success!",
+                "Shipping details saved.",
+                "success"
+            );
+
+
+            document
+            .getElementById(
+                'jntName'
+            ).value = '';
+
+
+            document
+            .getElementById(
+                'jntFee'
+            ).value = '';
+
+        })
+
+        .catch(error => {
+
+            showAlert(
+                "Error",
+                error.message,
+                "error"
+            );
+
         });
 
+    }
 
-        // --- FIREBASE CONFIG & APP LOGIC ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyCSUDE6Vt4PO6HULNyTLZbivDZvCSSSSEo",
-            authDomain: "jntshiporder.firebaseapp.com",
-            projectId: "jntshiporder",
-            storageBucket: "jntshiporder.firebasestorage.app",
-            messagingSenderId: "848162701714",
-            appId: "1:848162701714:web:a210d538b87061b02b014b"
-        };
+    else {
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        showAlert(
+            "Missing Info",
+            "Ilagay ang customer name at tamang shipping fee.",
+            "warning"
+        );
 
-        let allAdminData = [];
-        let allJntData = [];
+    }
 
-        const todayDate = new Date();
-        todayDate.setMinutes(todayDate.getMinutes() - todayDate.getTimezoneOffset());
-        const formattedToday = todayDate.toISOString().split('T')[0];
-        
-        document.getElementById('startDate').value = formattedToday;
-        document.getElementById('endDate').value = formattedToday;
-        document.getElementById('adminDate').value = formattedToday;
-        document.getElementById('jntDate').value = formattedToday;
+}
 
-        // SAVE ADMIN
-        function saveAdminOrder() {
-            const name = document.getElementById('adminName').value;
-            const qty = parseInt(document.getElementById('itemQty').value) || 0;
-            const recordDate = document.getElementById('adminDate').value; 
 
-            if(qty > 0 && recordDate) {
-                db.collection("admin_orders").add({
-                    admin: name,
-                    quantity: qty,
-                    date_encoded: recordDate, 
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    showAlert("Success!", "Admin order has been saved.", "success");
-                    document.getElementById('itemQty').value = '';
-                }).catch(error => showAlert("Error", error.message, "error"));
-            } else {
-                showAlert("Missing Info", "Paki-check kung may laman ang Item Quantity at Date.", "warning");
-            }
-        }
 
-        // SAVE JNT
-        function saveJntShipping() {
-            const name = document.getElementById('jntName').value;
-            const fee = parseFloat(document.getElementById('jntFee').value) || 0;
-            const recordDate = document.getElementById('jntDate').value; 
+/* =========================================================
+   DELETE ADMIN
+========================================================= */
 
-            if(name && fee > 0 && recordDate) {
-                db.collection("jnt_shipping").add({
-                    customerName: name,
-                    shippingFee: fee,
-                    date_encoded: recordDate,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    showAlert("Success!", "Shipping details saved.", "success");
-                    document.getElementById('jntName').value = '';
-                    document.getElementById('jntFee').value = '';
-                }).catch(error => showAlert("Error", error.message, "error"));
-            } else {
-                showAlert("Missing Info", "Ilagay ang customer name at tamang shipping fee.", "warning");
-            }
-        }
+function deleteAdmin(id) {
 
-        // DELETE & EDIT ADMIN
-        function deleteAdmin(id) {
-            showConfirm("Burahin ang admin order record na ito?", () => {
-                db.collection("admin_orders").doc(id).delete()
-                  .then(() => showAlert("Deleted", "Record removed successfully.", "success"))
-                  .catch(error => showAlert("Error", error.message, "error"));
+    showConfirm(
+        "Burahin ang admin order record na ito?",
+        () => {
+
+            db
+            .collection("admin_orders")
+            .doc(id)
+            .delete()
+
+            .then(() => {
+
+                showAlert(
+                    "Deleted",
+                    "Record removed successfully.",
+                    "success"
+                );
+
+            })
+
+            .catch(error => {
+
+                showAlert(
+                    "Error",
+                    error.message,
+                    "error"
+                );
+
             });
+
         }
+    );
 
-        function editAdmin(id) {
-            const item = allAdminData.find(x => x.id === id);
-            if(!item) return;
+}
 
-            showPrompt(`Edit quantity para kay ${item.admin.split(' ')[0]}:`, item.quantity, (newQty) => {
-                if(newQty !== null && newQty.toString().trim() !== "" && !isNaN(newQty)) {
-                    db.collection("admin_orders").doc(id).update({
-                        quantity: parseInt(newQty)
-                    })
-                    .then(() => showAlert("Updated", "Admin order updated successfully.", "success"))
-                    .catch(error => showAlert("Error", error.message, "error"));
-                }
-            });
-        }
 
-        // DELETE & EDIT JNT
-        function deleteJnt(id) {
-            showConfirm("Burahin ang shipping detail na ito?", () => {
-                db.collection("jnt_shipping").doc(id).delete()
-                  .then(() => showAlert("Deleted", "Record removed successfully.", "success"))
-                  .catch(error => showAlert("Error", error.message, "error"));
-            });
-        }
 
-        function editJnt(id) {
-            const item = allJntData.find(x => x.id === id);
-            if(!item) return;
+/* =========================================================
+   EDIT ADMIN
+========================================================= */
 
-            showPrompt(`Edit shipping fee para kay ${item.customerName}:`, item.shippingFee, (newFee) => {
-                if(newFee !== null && newFee.toString().trim() !== "" && !isNaN(newFee)) {
-                    db.collection("jnt_shipping").doc(id).update({
-                        shippingFee: parseFloat(newFee)
-                    })
-                    .then(() => showAlert("Updated", "Shipping fee updated successfully.", "success"))
-                    .catch(error => showAlert("Error", error.message, "error"));
-                }
-            });
-        }
+function editAdmin(id) {
 
-        // COPY TABLE
-        function copyTable(tableBodyId) {
-            const rows = document.querySelectorAll(`#${tableBodyId} tr`);
-            
-            if(rows.length === 0) {
-                showAlert("Empty Table", "Walang data na pwedeng i-copy.", "warning");
-                return;
+    const item =
+        allAdminData.find(
+            x => x.id === id
+        );
+
+
+    if (!item) return;
+
+
+    showPrompt(
+
+        `Edit quantity para kay ${item.admin.split(' ')[0]}:`,
+
+        item.quantity,
+
+        (newQty) => {
+
+            if (
+                newQty !== null &&
+                newQty
+                .toString()
+                .trim() !== "" &&
+                !isNaN(newQty)
+            ) {
+
+                db
+                .collection(
+                    "admin_orders"
+                )
+                .doc(id)
+                .update({
+
+                    quantity:
+                        parseInt(newQty)
+
+                })
+
+                .then(() => {
+
+                    showAlert(
+                        "Updated",
+                        "Admin order updated successfully.",
+                        "success"
+                    );
+
+                })
+
+                .catch(error => {
+
+                    showAlert(
+                        "Error",
+                        error.message,
+                        "error"
+                    );
+
+                });
+
             }
 
-            let textToCopy = "";
-            if(tableBodyId === 'adminTableBody') {
-                textToCopy += "#\tAdmin Name\tQty\n";
-            } else {
-                textToCopy += "#\tCustomer Name\tFee (₱)\n";
+        }
+
+    );
+
+}
+
+
+
+/* =========================================================
+   DELETE J&T
+========================================================= */
+
+function deleteJnt(id) {
+
+    showConfirm(
+
+        "Burahin ang shipping detail na ito?",
+
+        () => {
+
+            db
+            .collection("jnt_shipping")
+            .doc(id)
+            .delete()
+
+            .then(() => {
+
+                showAlert(
+                    "Deleted",
+                    "Record removed successfully.",
+                    "success"
+                );
+
+            })
+
+            .catch(error => {
+
+                showAlert(
+                    "Error",
+                    error.message,
+                    "error"
+                );
+
+            });
+
+        }
+
+    );
+
+}
+
+
+
+/* =========================================================
+   EDIT J&T SHIPPING FEE
+========================================================= */
+
+function editJnt(id) {
+
+    const item =
+        allJntData.find(
+            x => x.id === id
+        );
+
+
+    if (!item) return;
+
+
+    showPrompt(
+
+        `Edit shipping fee para kay ${item.customerName}:`,
+
+        item.shippingFee,
+
+        (newFee) => {
+
+            if (
+                newFee !== null &&
+                newFee
+                .toString()
+                .trim() !== "" &&
+                !isNaN(newFee)
+            ) {
+
+                db
+                .collection(
+                    "jnt_shipping"
+                )
+                .doc(id)
+                .update({
+
+                    shippingFee:
+                        parseFloat(
+                            newFee
+                        )
+
+                })
+
+                .then(() => {
+
+                    showAlert(
+                        "Updated",
+                        "Shipping fee updated successfully.",
+                        "success"
+                    );
+
+                })
+
+                .catch(error => {
+
+                    showAlert(
+                        "Error",
+                        error.message,
+                        "error"
+                    );
+
+                });
+
             }
 
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                if(cells.length >= 3) {
-                    textToCopy += `${cells[0].innerText}\t${cells[1].innerText}\t${cells[2].innerText}\n`;
-                }
-            });
-
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showAlert("Copied!", "Na-copy na ang table! Pwede mo na i-paste (Ctrl+V).", "success");
-            }).catch(err => {
-                showAlert("Error", "Hindi ma-copy ang table.", "error");
-            });
         }
 
-        // COMPUTE & UPDATE UI
-        function updateDashboardTotals() {
-            const start = document.getElementById('startDate').value;
-            const end = document.getElementById('endDate').value;
+    );
 
-            // Admin
-            let shairaTotal = 0, ladyannTotal = 0, jeniferTotal = 0;
-            let adminTableHTML = "";
-            let adminCounter = 1;
+}
 
-            allAdminData.forEach(item => {
-                if(item.date_encoded >= start && item.date_encoded <= end) {
-                    if(item.admin === "Shaira Janiel D. Monsanto") shairaTotal += item.quantity;
-                    if(item.admin === "Ladyann M. De Castro") ladyannTotal += item.quantity;
-                    if(item.admin === "Jenifer L. Pineda") jeniferTotal += item.quantity;
 
-                    adminTableHTML += `
-                        <tr class="border-b hover:bg-gray-50 transition duration-150">
-                            <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">${adminCounter++}</td>
-                            <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700">${item.admin.split(' ')[0]}</td> 
-                            <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-blue-600">${item.quantity}</td>
-                            <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
-                                <button onclick="editAdmin('${item.id}')" title="Edit" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
-                                    <iconify-icon icon="mdi:pencil" class="text-base"></iconify-icon>
-                                </button>
-                                <button onclick="deleteAdmin('${item.id}')" title="Delete" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
-                                    <iconify-icon icon="mdi:trash-can-outline" class="text-base"></iconify-icon>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                }
-            });
 
-            document.getElementById('dashShaira').innerText = shairaTotal.toLocaleString();
-            document.getElementById('dashLadyann').innerText = ladyannTotal.toLocaleString();
-            document.getElementById('dashJenifer').innerText = jeniferTotal.toLocaleString();
-            document.getElementById('adminTableBody').innerHTML = adminTableHTML;
+/* =========================================================
+   COPY TABLE
+========================================================= */
 
-            // J&T
-            let totalOrders = 0, totalFees = 0;
-            let jntTableHTML = ""; 
-            let jntCounter = 1;
+function copyTable(tableBodyId) {
 
-            allJntData.forEach(item => {
-                if(item.date_encoded >= start && item.date_encoded <= end) {
-                    totalOrders++;
-                    totalFees += item.shippingFee;
-                    
-                    jntTableHTML += `
-                        <tr class="border-b hover:bg-gray-50 transition duration-150">
-                            <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">${jntCounter++}</td>
-                            <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700">${item.customerName}</td>
-                            <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-red-600">₱ ${item.shippingFee.toLocaleString()}</td>
-                            <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
-                                <button onclick="editJnt('${item.id}')" title="Edit" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
-                                    <iconify-icon icon="mdi:pencil" class="text-base"></iconify-icon>
-                                </button>
-                                <button onclick="deleteJnt('${item.id}')" title="Delete" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110">
-                                    <iconify-icon icon="mdi:trash-can-outline" class="text-base"></iconify-icon>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                }
-            });
+    const rows =
+        document.querySelectorAll(
+            `#${tableBodyId} tr`
+        );
 
-            document.getElementById('dashJntOrders').innerText = totalOrders.toLocaleString();
-            document.getElementById('dashJntFees').innerText = totalFees.toLocaleString();
-            document.getElementById('jntTableBody').innerHTML = jntTableHTML;
+
+    if (
+        rows.length === 0
+    ) {
+
+        showAlert(
+            "Empty Table",
+            "Walang data na pwedeng i-copy.",
+            "warning"
+        );
+
+        return;
+
+    }
+
+
+    let textToCopy = "";
+
+
+    if (
+        tableBodyId ===
+        'adminTableBody'
+    ) {
+
+        textToCopy +=
+            "#\tAdmin Name\tQty\n";
+
+    }
+
+    else {
+
+        textToCopy +=
+            "#\tCustomer Name\tFee (₱)\n";
+
+    }
+
+
+    rows.forEach(row => {
+
+        const cells =
+            row.querySelectorAll(
+                'td'
+            );
+
+
+        if (
+            cells.length >= 3
+        ) {
+
+            textToCopy +=
+                `${cells[0].innerText}\t${cells[1].innerText}\t${cells[2].innerText}\n`;
+
         }
 
-        document.getElementById('startDate').addEventListener('change', updateDashboardTotals);
-        document.getElementById('endDate').addEventListener('change', updateDashboardTotals);
+    });
 
-        // LISTENERS
-        db.collection("admin_orders").orderBy("timestamp", "desc").onSnapshot((querySnapshot) => {
-            allAdminData = []; 
-            querySnapshot.forEach((doc) => allAdminData.push({ id: doc.id, ...doc.data() }));
-            updateDashboardTotals(); 
-        });
 
-        db.collection("jnt_shipping").orderBy("timestamp", "desc").onSnapshot((querySnapshot) => {
-            allJntData = []; 
-            querySnapshot.forEach((doc) => allJntData.push({ id: doc.id, ...doc.data() }));
-            updateDashboardTotals(); 
-        });
+    navigator
+    .clipboard
+    .writeText(textToCopy)
 
-    </script>
+    .then(() => {
+
+        showAlert(
+            "Copied!",
+            "Na-copy na ang table! Pwede mo na i-paste (Ctrl+V).",
+            "success"
+        );
+
+    })
+
+    .catch(() => {
+
+        showAlert(
+            "Error",
+            "Hindi ma-copy ang table.",
+            "error"
+        );
+
+    });
+
+}
+
+
+
+/* =========================================================
+   DASHBOARD TOTALS
+========================================================= */
+
+function updateDashboardTotals() {
+
+    const start =
+        document
+        .getElementById(
+            'startDate'
+        ).value;
+
+
+    const end =
+        document
+        .getElementById(
+            'endDate'
+        ).value;
+
+
+
+    /* ==========================
+       ADMIN
+    ========================== */
+
+    let shairaTotal = 0;
+    let ladyannTotal = 0;
+    let jeniferTotal = 0;
+
+    let adminTableHTML = "";
+
+    let adminCounter = 1;
+
+
+
+    allAdminData.forEach(item => {
+
+        if (
+            item.date_encoded >= start &&
+            item.date_encoded <= end
+        ) {
+
+            if (
+                item.admin ===
+                "Shaira Janiel D. Monsanto"
+            ) {
+
+                shairaTotal +=
+                    item.quantity;
+
+            }
+
+
+            if (
+                item.admin ===
+                "Ladyann M. De Castro"
+            ) {
+
+                ladyannTotal +=
+                    item.quantity;
+
+            }
+
+
+            if (
+                item.admin ===
+                "Jenifer L. Pineda"
+            ) {
+
+                jeniferTotal +=
+                    item.quantity;
+
+            }
+
+
+
+            adminTableHTML += `
+
+                <tr class="border-b hover:bg-gray-50 transition duration-150">
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">
+                        ${adminCounter++}
+                    </td>
+
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700">
+                        ${item.admin.split(' ')[0]}
+                    </td>
+
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-blue-600">
+                        ${item.quantity}
+                    </td>
+
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
+
+
+                        <button
+                            onclick="editAdmin('${item.id}')"
+                            title="Edit"
+                            class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110"
+                        >
+
+                            <iconify-icon
+                                icon="mdi:pencil"
+                                class="text-base"
+                            ></iconify-icon>
+
+                        </button>
+
+
+                        <button
+                            onclick="deleteAdmin('${item.id}')"
+                            title="Delete"
+                            class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110"
+                        >
+
+                            <iconify-icon
+                                icon="mdi:trash-can-outline"
+                                class="text-base"
+                            ></iconify-icon>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    });
+
+
+
+    document.getElementById(
+        'dashShaira'
+    ).innerText =
+        shairaTotal.toLocaleString();
+
+
+    document.getElementById(
+        'dashLadyann'
+    ).innerText =
+        ladyannTotal.toLocaleString();
+
+
+    document.getElementById(
+        'dashJenifer'
+    ).innerText =
+        jeniferTotal.toLocaleString();
+
+
+    document.getElementById(
+        'adminTableBody'
+    ).innerHTML =
+        adminTableHTML;
+
+
+
+    /* ==========================
+       J&T SHIPPING
+    ========================== */
+
+    let totalOrders = 0;
+    let totalFees = 0;
+
+    let jntTableHTML = "";
+
+    let jntCounter = 1;
+
+
+
+    allJntData.forEach(item => {
+
+        if (
+            item.date_encoded >= start &&
+            item.date_encoded <= end
+        ) {
+
+            totalOrders++;
+
+            totalFees +=
+                item.shippingFee;
+
+
+
+            jntTableHTML += `
+
+                <tr class="border-b hover:bg-gray-50 transition duration-150">
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm text-gray-500 font-medium">
+                        ${jntCounter++}
+                    </td>
+
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm text-gray-700 uppercase">
+                        ${item.customerName}
+                    </td>
+
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm font-bold text-red-600">
+                        ₱ ${item.shippingFee.toLocaleString()}
+                    </td>
+
+
+                    <td class="p-2 md:p-3 text-xs md:text-sm text-center whitespace-nowrap">
+
+
+                        <button
+                            onclick="editJnt('${item.id}')"
+                            title="Edit"
+                            class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110"
+                        >
+
+                            <iconify-icon
+                                icon="mdi:pencil"
+                                class="text-base"
+                            ></iconify-icon>
+
+                        </button>
+
+
+                        <button
+                            onclick="deleteJnt('${item.id}')"
+                            title="Delete"
+                            class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full shadow-sm mx-1 inline-flex items-center justify-center transition hover:scale-110"
+                        >
+
+                            <iconify-icon
+                                icon="mdi:trash-can-outline"
+                                class="text-base"
+                            ></iconify-icon>
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+    });
+
+
+
+    document.getElementById(
+        'dashJntOrders'
+    ).innerText =
+        totalOrders.toLocaleString();
+
+
+    document.getElementById(
+        'dashJntFees'
+    ).innerText =
+        totalFees.toLocaleString();
+
+
+    document.getElementById(
+        'jntTableBody'
+    ).innerHTML =
+        jntTableHTML;
+
+}
+
+
+
+/* =========================================================
+   FILTER LISTENERS
+========================================================= */
+
+document
+.getElementById(
+    'startDate'
+)
+.addEventListener(
+    'change',
+    updateDashboardTotals
+);
+
+
+document
+.getElementById(
+    'endDate'
+)
+.addEventListener(
+    'change',
+    updateDashboardTotals
+);
+
+
+
+/* =========================================================
+   FIREBASE REALTIME LISTENERS
+========================================================= */
+
+/* ADMIN ORDERS */
+
+db
+.collection("admin_orders")
+.orderBy(
+    "timestamp",
+    "desc"
+)
+.onSnapshot(
+    (querySnapshot) => {
+
+        allAdminData = [];
+
+
+        querySnapshot.forEach(
+            (doc) => {
+
+                allAdminData.push({
+
+                    id: doc.id,
+
+                    ...doc.data()
+
+                });
+
+            }
+        );
+
+
+        updateDashboardTotals();
+
+    }
+);
+
+
+
+/* J&T ORDERS */
+
+db
+.collection("jnt_shipping")
+.orderBy(
+    "timestamp",
+    "desc"
+)
+.onSnapshot(
+    (querySnapshot) => {
+
+        allJntData = [];
+
+
+        querySnapshot.forEach(
+            (doc) => {
+
+                allJntData.push({
+
+                    id: doc.id,
+
+                    ...doc.data()
+
+                });
+
+            }
+        );
+
+
+        updateDashboardTotals();
+
+    }
+);
+
+
+</script>
+
 </body>
 </html>
